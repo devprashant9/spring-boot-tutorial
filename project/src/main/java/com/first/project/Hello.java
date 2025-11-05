@@ -19,7 +19,7 @@ public class Hello {
     }
 
     @PostMapping("/hello")
-    public String helloPost(@RequestBody String name) {
-        return "Hello " + name + " !";
+    public HelloResponse helloPost(@RequestBody String name) {
+        return new HelloResponse(name);
     }
 }
