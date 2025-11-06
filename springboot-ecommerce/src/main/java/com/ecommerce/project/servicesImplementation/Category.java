@@ -2,7 +2,9 @@ package com.ecommerce.project.servicesImplementation;
 
 import com.ecommerce.project.models.CategoryModel;
 import com.ecommerce.project.services.CategoryService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +30,9 @@ public class Category implements CategoryService {
     public String deleteCategory(Long categoryID) {
         CategoryModel category = categories.stream()
                 .filter(c -> c.getCategoryId().equals(categoryID))
-                .findFirst().orElse(null);
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "category not found"));
         categories.remove(category);
-        if (category == null) {
-            return "category with id: " + categoryID + " not found";
-        } else {
-            return "category with id: " + categoryID + " deleted";
-        }
+        return "category with id: " + categoryID + " deleted";
     }
 }
