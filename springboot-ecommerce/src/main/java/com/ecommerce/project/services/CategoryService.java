@@ -9,4 +9,5 @@ public interface CategoryService {
     List<CategoryModel> getAllCategories();
     void createNewCategory(CategoryModel category);
     String deleteCategory(Long categoryID);
+    CategoryModel updateCategory(CategoryModel category, Long categoryId);
 }

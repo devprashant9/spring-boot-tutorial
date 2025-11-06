@@ -11,27 +11,39 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/api/public/categories")
-    public List<CategoryModel> getAllCategories() {
-        return categoryService.getAllCategories();
+    @GetMapping("/public/categories")
+    public ResponseEntity<List<CategoryModel>> getAllCategories() {
+        List<CategoryModel> allCategories = categoryService.getAllCategories();
+        return new ResponseEntity<>(allCategories, HttpStatus.OK);
     }
 
-    @PostMapping("/api/public/categories")
-    public String createNewCategory(@RequestBody CategoryModel category) {
+    @PostMapping("/public/categories")
+    public ResponseEntity<String> createNewCategory(@RequestBody CategoryModel category) {
         categoryService.createNewCategory(category);
-        return ("category created successfully");
+        return new ResponseEntity<>("category created successfully", HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/api/admin/categories/{categoryId}")
+    @DeleteMapping("/admin/categories/{categoryId}")
     public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId) {
         try {
             String status = categoryService.deleteCategory(categoryId);
             return new ResponseEntity<>(status, HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
+        }
+    }
+
+    @PutMapping("/public/categories/{categoryId}")
+    public ResponseEntity<String> updateCategory(@RequestBody CategoryModel category, @PathVariable Long categoryId) {
+        try {
+            CategoryModel updatedCategory = categoryService.updateCategory(category, categoryId);
+            return new ResponseEntity<>("category with id: " + categoryId + " updated", HttpStatus.OK);
         } catch (ResponseStatusException e) {
             return new ResponseEntity<>(e.getReason(), e.getStatusCode());
         }
