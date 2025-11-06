@@ -1,12 +1,15 @@
 package com.ecommerce.project.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity(name = "categories")
 public class CategoryModel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
 
     private String categoryName;
@@ -14,6 +17,9 @@ public class CategoryModel {
     public CategoryModel(Long categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+    }
+
+    public CategoryModel() {
     }
 
     public Long getCategoryId() {
