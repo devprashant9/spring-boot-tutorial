@@ -10,7 +10,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -39,8 +38,9 @@ public class Category implements CategoryService {
 
     @Override
     public CategoryModel updateCategory(CategoryModel category, Long categoryId) {
-        CategoryModel savedCategory = categoryRepository.findById(categoryId)
+        categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "category not found"));
+        CategoryModel savedCategory;
 
         category.setCategoryId(categoryId);
         savedCategory = categoryRepository.save(category);
