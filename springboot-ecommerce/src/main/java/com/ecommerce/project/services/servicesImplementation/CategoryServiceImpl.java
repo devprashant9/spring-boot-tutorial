@@ -1,4 +1,4 @@
-package com.ecommerce.project.servicesImplementation;
+package com.ecommerce.project.services.servicesImplementation;
 
 import com.ecommerce.project.models.CategoryModel;
 import com.ecommerce.project.repositories.CategoryRepository;
@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Service
-public class Category implements CategoryService {
+public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -21,6 +21,14 @@ public class Category implements CategoryService {
     @Override
     public List<CategoryModel> getAllCategories() {
         return categoryRepository.findAll();
+    }
+
+    @Override
+    public CategoryModel getSingleCategory(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                "Category not found with id = " + categoryId));
     }
 
     @Override
