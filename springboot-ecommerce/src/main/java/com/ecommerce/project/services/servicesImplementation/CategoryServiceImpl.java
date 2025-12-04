@@ -3,8 +3,9 @@ package com.ecommerce.project.services.servicesImplementation;
 import com.ecommerce.project.exceptions.APIException;
 import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.models.CategoryModel;
-import com.ecommerce.project.payloads.CategoryRequest;
-import com.ecommerce.project.payloads.CategoryResponse;
+import com.ecommerce.project.payloads.RequestDTOs.CategoryRequest;
+import com.ecommerce.project.payloads.ResponseDTOs.CategoryResponse;
+import com.ecommerce.project.payloads.common.PaginatedResponse;
 import com.ecommerce.project.repositories.CategoryRepository;
 import com.ecommerce.project.services.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -81,9 +83,28 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryResponse> getPaginatedResults(Integer pageNumber, Integer pageSize) {
-        Pageable pageDetails = PageRequest.of(pageNumber - 1, pageSize);
+    public PaginatedResponse<CategoryResponse> getPaginatedResults(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageDetails = PageRequest.of(pageNumber - 1, pageSize, sortByAndOrder);
         Page<CategoryModel> paginatedResults = categoryRepository.findAll(pageDetails);
-        return paginatedResults.stream().map(category -> modelMapper.map(category, CategoryResponse.class)).toList();
+        List<CategoryResponse> list = paginatedResults
+                .getContent()
+                .stream()
+                .map(category -> modelMapper.map(category, CategoryResponse.class))
+                .toList();
+
+        PaginatedResponse<CategoryResponse> paginatedResponse = new PaginatedResponse<>();
+        paginatedResponse.setResponse(list);
+        paginatedResponse.setPageNumber(paginatedResults.getNumber() + 1);
+        paginatedResponse.setPageSize(paginatedResults.getSize());
+        paginatedResponse.setTotalElements(paginatedResults.getTotalElements());
+        paginatedResponse.setTotalPages(paginatedResults.getTotalPages());
+        paginatedResponse.setLastPage(paginatedResults.isLast());
+
+        return paginatedResponse;
     }
 }

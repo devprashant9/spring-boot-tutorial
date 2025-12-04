@@ -1,7 +1,8 @@
 package com.ecommerce.project.services;
 
-import com.ecommerce.project.payloads.CategoryRequest;
-import com.ecommerce.project.payloads.CategoryResponse;
+import com.ecommerce.project.payloads.RequestDTOs.CategoryRequest;
+import com.ecommerce.project.payloads.ResponseDTOs.CategoryResponse;
+import com.ecommerce.project.payloads.common.PaginatedResponse;
 
 import java.util.List;
 
@@ -12,6 +13,6 @@ public interface CategoryService {
     CategoryResponse createNewCategory(CategoryRequest category);
     CategoryResponse updateCategory(CategoryRequest category, Long categoryId);
     void deleteCategory(Long categoryId);
-    List<CategoryResponse> getPaginatedResults(Integer pageNumber, Integer pageSize);
+    PaginatedResponse<CategoryResponse> getPaginatedResults(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 }
 

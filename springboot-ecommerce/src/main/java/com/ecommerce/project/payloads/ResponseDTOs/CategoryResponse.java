@@ -1,4 +1,4 @@
-package com.ecommerce.project.payloads;
+package com.ecommerce.project.payloads.ResponseDTOs;
 
 import lombok.*;
 
