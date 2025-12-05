@@ -1,6 +1,6 @@
 package com.ecommerce.project.controllers;
 
-import com.ecommerce.project.configs.AppCategoriesConstants;
+import com.ecommerce.project.configs.AppConstants;
 import com.ecommerce.project.payloads.RequestDTOs.CategoryRequest;
 import com.ecommerce.project.payloads.ResponseDTOs.CategoryResponse;
 import com.ecommerce.project.payloads.common.PaginatedResponse;
@@ -55,10 +55,10 @@ public class CategoryController {
 
     @GetMapping("/paginated-results")
     public ResponseEntity<PaginatedResponse<CategoryResponse>> paginatedResults(
-            @RequestParam(name = "pageNumber", defaultValue = AppCategoriesConstants.PAGE_NUMBER) Integer pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = AppCategoriesConstants.PAGE_SIZE) Integer pageSize,
-            @RequestParam(name = "sortBy", defaultValue = AppCategoriesConstants.SORT_BY) String sortBy,
-            @RequestParam(name = "sortOrder", defaultValue = AppCategoriesConstants.SORT_ORDER) String sortOrder
+            @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER) Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE) Integer pageSize,
+            @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_BY_CATEGORIES) String sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_ORDER) String sortOrder
     ) {
         PaginatedResponse<CategoryResponse> response = categoryService.getPaginatedResults(pageNumber, pageSize, sortBy, sortOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
