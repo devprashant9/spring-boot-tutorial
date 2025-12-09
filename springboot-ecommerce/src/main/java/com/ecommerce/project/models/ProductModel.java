@@ -25,4 +25,8 @@ public class ProductModel {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryModel categoryModel;
+
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private UserModel user;
 }
